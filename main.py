@@ -76,6 +76,25 @@ ax.set_ylabel('Height (m)')
 ax.set_title('Projectile Motion Simulator')
 ax.grid(True)
 
+# Add Information Box
+box_text = ax.text(
+    0.02, 0.97, '', transform=ax.transAxes,
+    verticalalignment='top', fontsize=10,
+    bbox=dict(boxstyle='round,pad=0.4', facecolor='lightyellow', alpha=0.8)
+)
+
+def update_box(x_data, y_data):
+    max_alt = max(y_data)
+    range = x_data[-1]
+    tof = (len(x_data)-1) * 0.01
+    box_text.set_text(
+        f'Max Altitude  : {max_alt:.1f} m\n'
+        f'Range         : {range:.1f} m\n'
+        f'Time of Flight: {tof:.2f} s'
+    )
+
+update_box(x_data,y_data)
+
 # Sliders
 sliders_stats = [
     ('v0', 'Initial Speed (m/s)', 10, 200),
@@ -106,6 +125,7 @@ def update(val):
     ax.relim()
     ax.autoscale_view()
     ax.set_ylim(bottom=0)
+    update_box(x_data,y_data)
     fig.canvas.draw_idle()
 
 for s in sliders.values():
