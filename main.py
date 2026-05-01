@@ -51,7 +51,7 @@ def nodrag(v0, angle):
     vy = v0 * np.sin(angle2rad)
     t_flight = 2 * vy / g
     t = np.linspace(0,t_flight, 500)
-    x = vy * t
+    x = vx * t
     y = vy * t - 0.5 * g * t**2
 
     return x, np.maximum(y,0)
