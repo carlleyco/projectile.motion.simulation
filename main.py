@@ -7,6 +7,11 @@ dt = 0.01       # time (s)
 v0 = 50         # initial speed
 angle = 45      # launch angle
 
+m = 1.0         # mass (kg)
+Cd = 0.47       # drag coefficient
+rho = 1.225     # air density
+A = 0.01        # area of the cross section
+
 # Starting Conditions
 angle2rad = np.radians(angle)
 vx = v0 * np.cos(angle2rad)
@@ -20,8 +25,19 @@ y_list = [y]
 
 # Simulate
 while y >= 0:
-    ax = 0
-    ay = -g
+    v = np.sqrt(vx**2 + vy**2) # get current speed
+
+    Fd = 0.5 * Cd *rho * A * v**2 # add drag
+
+    # negate velocity
+    if v > 0:
+        Fd_x = -Fd * (vx/v)
+        Fd_y = -Fd * (vy/v)
+    else:
+        Fd_x, Fd_y = 0,0
+
+    ax = Fd_x / m
+    ay = -g + (Fd_y/m)
 
     vx += ax * dt
     vy += ay * dt
