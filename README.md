@@ -1,10 +1,10 @@
-# Projectile Motion Simulator
+# 🏈 Projectile Motion Simulator
 
 A projectile motion simulator built in Python. This graphs the trajectory of an object under gravity and air drag, then plots it in real time with built-in sliders. There added is a no-drag trajectory for reference shown simultaneously for comparison.
 
 This is my first project in a series of simulations relevant about aerospace to be a part of a long-term engineering porfolio.
 
-## Features
+## ✨ Features
 - Simulates Projectile Motion with **air drag** using numerical integration (Euler's Method)
 - Displays a **no-drag reference trajectory** for comparison
 - **5 Interactive Sliders** - adjust any parameter
@@ -16,9 +16,9 @@ This is my first project in a series of simulations relevant about aerospace to 
 - **Live Information Box** showing max altitude, range, and time of the flight
 - Labeled Graphs with Grid, Legend, and Axis units
 
-## How it Works
+## ⚙️ How it Works
 
-### Physics
+### 🔭 Physics
 **Gravity** pulls the object downward:
 ```
 Fg = m * g
@@ -47,9 +47,9 @@ ax = Fd_x / m
 ay = -g + (Fd_y / m)
 ```
 
-**Note:** The trajectory of no-drag does not use mass because in the absence of drag, mass cancels out of the equations entirely.
+**💡 Note:** The trajectory of no-drag does not use mass because in the absence of drag, mass cancels out of the equations entirely.
 
-### Numerical Method
+### 🔢 Numerical Method
 
 The simulation uses the **Euler's Method**. At each timestep (`dt = 0.01s`), velocity and position are updated:
 ```
@@ -61,7 +61,7 @@ y  += vy * dt
 
 This repeats in a loop until the object returns to ground level (`y < 0`).
 
-### Code Structure
+### 🗂️ Code Structure
 | Function | Purpose |
 |---|---|
 | `start(v0, angle, Cd, m, A)` | Runs the simulation |
@@ -71,7 +71,7 @@ This repeats in a loop until the object returns to ground level (`y < 0`).
 
 ---
 
-## What I Learned
+## 🧠 What I Learned
 - How to model physical forces as code using Newton's Second Law
 - Why mass does not affect trajectory in the absence of air resistance
 - How `matplotlib.widgets.Slider` works and how to connect multiple of them in one single function
@@ -79,7 +79,7 @@ This repeats in a loop until the object returns to ground level (`y < 0`).
 
 ---
 
-## How it could be Improved
+## 🔧 How it could be Improved
 - **Runge-Kutta (RK4) Integration** instead of Euler for higher accuracy, most importantly at larger timesteps
 - **Varying Air Density with Altitude** using the International Standard Atmosphere (ISA) model instead of a fixed value
 - **3D Trajectory** by adding a third axis and a heading angle to simulate lateral movement
@@ -89,7 +89,7 @@ This repeats in a loop until the object returns to ground level (`y < 0`).
 
 ---
 
-## How to Run
+## ▶️ How to Run
 
 ##Requirements:** Python 3.8 or newer
 
@@ -107,9 +107,9 @@ Use the sliders at the bottom of the window to adjust parameters. The graph upda
 
 ---
 
-## Project Status
+## 📌 Project Status
 This is the **Final Stage** of the program fully functional with sliders, comparison trajectories, and live statistics. Future improvements will be added listed above if there are any.
 
-## Demo
+## 🎬 Demo
 
-> Demo Video will be linked here once recorded.
+https://github.com/user-attachments/assets/0d37fdc3-1b71-4df6-9aea-0925c7b7b81e
