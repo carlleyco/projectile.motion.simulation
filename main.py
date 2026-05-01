@@ -51,7 +51,7 @@ while y >= 0:
 # --- Plot ---
 plt.figure(figsize=(10, 5))
 plt.plot(x_list, y_list, color='royalblue')
-plt.title(f'Projectile Motion with No Drag Resistance | v0={v0} m/s, angle={angle}°')
+plt.title(f'Projectile Motion Simulator | v0={v0} m/s, angle={angle}°')
 plt.xlabel('Horizontal Distance (m)')
 plt.ylabel('Height (m)')
 plt.grid(True)
