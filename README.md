@@ -91,7 +91,7 @@ This repeats in a loop until the object returns to ground level (`y < 0`).
 
 ## ▶️ How to Run
 
-##Requirements:** Python 3.8 or newer
+**Requirements:** Python 3.8 or newer
 
 **Install dependencies:**
 ```bash
