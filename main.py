@@ -44,6 +44,18 @@ def start(v0, angle, Cd, m, A):
         y_list.append(y)
     return x_list, y_list
 
+def nodrag(v0, angle):
+    g = 9.80665
+    angle2rad = np.radians(angle)
+    vx = v0 * np.cos(angle2rad)
+    vy = v0 * np.sin(angle2rad)
+    t_flight = 2 * vy / g
+    t = np.linspace(0,t_flight, 500)
+    x = vy * t
+    y = vy * t - 0.5 * g * t**2
+
+    return x, np.maximum(y,0)
+
 
 # Starting Values
 INIT = dict(v0=50, angle=45, Cd=0.47, m=1.0, A=0.01)
@@ -53,7 +65,11 @@ fig, ax = plt.subplots(figsize=(11,6))
 plt.subplots_adjust(left=0.1, right=0.98, top=0.93, bottom=0.42)
 
 x_data, y_data = start(INIT['v0'], INIT['angle'], INIT['Cd'], INIT['m'], INIT['A'])
-line, = ax.plot(x_data, y_data, color='royalblue', lw=2)
+x_nodrag, y_nodrag = nodrag(INIT['v0'], INIT['angle'])
+
+line, = ax.plot(x_data, y_data, color='royalblue', lw=2, label='With Drag')
+line_nodrag, = ax.plot(x_nodrag, y_nodrag, color='tomato', lw=1.5, label='No Drag', linestyle='--')
+ax.legend(loc='upper right')
 
 ax.set_xlabel('Horizontal Distance (m)')
 ax.set_ylabel('Height (m)')
@@ -80,8 +96,13 @@ def update(val):
         sliders['m'].val, sliders['A'].val
     )
 
+    x_nodrag, y_nodrag = nodrag(sliders['v0'].val, sliders['angle'].val)
+
     line.set_xdata(x_data)
     line.set_ydata(y_data)
+    line_nodrag.set_xdata(x_nodrag)
+    line_nodrag.set_ydata(y_nodrag)
+
     ax.relim()
     ax.autoscale_view()
     ax.set_ylim(bottom=0)
