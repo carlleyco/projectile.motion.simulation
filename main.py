@@ -1,59 +1,93 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
 
-# Values
-g = 9.80665     # gravity
-dt = 0.01       # time (s)
-v0 = 50         # initial speed
-angle = 45      # launch angle
+def start(v0, angle, Cd, m, A):
+    # Values
+    g = 9.80665     # gravity
+    dt = 0.01       # time (s)  
+    rho = 1.225     # air density
 
-m = 1.0         # mass (kg)
-Cd = 0.47       # drag coefficient
-rho = 1.225     # air density
-A = 0.01        # area of the cross section
+    # Starting Conditions
+    angle2rad = np.radians(angle)
+    vx = v0 * np.cos(angle2rad)
+    vy = v0 * np.sin(angle2rad)
 
-# Starting Conditions
-angle2rad = np.radians(angle)
-vx = v0 * np.cos(angle2rad)
-vy = v0 * np.sin(angle2rad)
+    x = 0.0
+    y = 0.0
 
-x = 0.0
-y = 0.0
+    x_list = [x]
+    y_list = [y]
 
-x_list = [x]
-y_list = [y]
+    # Simulate
+    while y >= 0:
+        v = np.sqrt(vx**2 + vy**2) # get current speed
+        Fd = 0.5 * Cd *rho * A * v**2 # add drag
 
-# Simulate
-while y >= 0:
-    v = np.sqrt(vx**2 + vy**2) # get current speed
+        # negate velocity
+        if v > 0:
+            Fd_x = -Fd * (vx/v)
+            Fd_y = -Fd * (vy/v)
+        else:
+            Fd_x, Fd_y = 0,0
 
-    Fd = 0.5 * Cd *rho * A * v**2 # add drag
+        ax_val = Fd_x / m
+        ay_val = -g + (Fd_y/m)
 
-    # negate velocity
-    if v > 0:
-        Fd_x = -Fd * (vx/v)
-        Fd_y = -Fd * (vy/v)
-    else:
-        Fd_x, Fd_y = 0,0
+        vx += ax_val * dt
+        vy += ay_val * dt
+        
+        x += vx * dt
+        y += vy * dt
 
-    ax = Fd_x / m
-    ay = -g + (Fd_y/m)
+        x_list.append(x)
+        y_list.append(y)
+    return x_list, y_list
 
-    vx += ax * dt
-    vy += ay * dt
-    
-    x += vx * dt
-    y += vy * dt
 
-    x_list.append(x)
-    y_list.append(y)
+# Starting Values
+INIT = dict(v0=50, angle=45, Cd=0.47, m=1.0, A=0.01)
 
-# --- Plot ---
-plt.figure(figsize=(10, 5))
-plt.plot(x_list, y_list, color='royalblue')
-plt.title(f'Projectile Motion Simulator | v0={v0} m/s, angle={angle}°')
-plt.xlabel('Horizontal Distance (m)')
-plt.ylabel('Height (m)')
-plt.grid(True)
-plt.axis('equal')
+# Graph
+fig, ax = plt.subplots(figsize=(11,6))
+plt.subplots_adjust(left=0.1, right=0.98, top=0.93, bottom=0.42)
+
+x_data, y_data = start(INIT['v0'], INIT['angle'], INIT['Cd'], INIT['m'], INIT['A'])
+line, = ax.plot(x_data, y_data, color='royalblue', lw=2)
+
+ax.set_xlabel('Horizontal Distance (m)')
+ax.set_ylabel('Height (m)')
+ax.set_title('Projectile Motion Simulator')
+ax.grid(True)
+
+# Sliders
+sliders_stats = [
+    ('v0', 'Initial Speed (m/s)', 10, 200),
+    ('angle', 'Launch Angle (deg)', 1, 90),
+    ('Cd', 'Drag Coefficient', 0.0, 1.0),
+    ('m', 'Mass (kg)', 0.1, 10.0),
+    ('A', 'Cross Section Area (m²)', 0.001, 0.1)
+]
+
+sliders = {}
+for i, (key, label, vmin, vmax) in enumerate(sliders_stats):
+    slider_ax = fig.add_axes([0.18, 0.30 - i * 0.055, 0.72, 0.025])
+    sliders[key] = Slider(slider_ax, label, vmin, vmax, valinit=INIT[key])
+
+def update(val):
+    x_data, y_data = start(
+        sliders['v0'].val, sliders['angle'].val, sliders['Cd'].val, 
+        sliders['m'].val, sliders['A'].val
+    )
+
+    line.set_xdata(x_data)
+    line.set_ydata(y_data)
+    ax.relim()
+    ax.autoscale_view()
+    ax.set_ylim(bottom=0)
+    fig.canvas.draw_idle()
+
+for s in sliders.values():
+    s.on_changed(update)
+
 plt.show()
