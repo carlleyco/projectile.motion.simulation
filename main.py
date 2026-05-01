@@ -16,8 +16,7 @@ def start(v0, angle, Cd, m, A):
     x = 0.0
     y = 0.0
 
-    x_list = [x]
-    y_list = [y]
+    x_list, y_list = [x], [y]
 
     # Simulate
     while y >= 0:
@@ -42,7 +41,8 @@ def start(v0, angle, Cd, m, A):
 
         x_list.append(x)
         y_list.append(y)
-    return x_list, y_list
+    
+    return np.array(x_list), np.array(y_list)
 
 def nodrag(v0, angle):
     g = 9.80665
